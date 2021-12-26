@@ -1,1 +1,67 @@
-// TODO
+.container {
+  display: flex;
+  flex-direction: column;
+  align-items: flex-start;
+
+  max-width: 700px;
+  margin: 2.5rem auto;
+
+  .cover {
+    margin-top: 5rem;
+
+    margin-left: -25vw;
+    width: 100vw;
+    height: 25rem;
+    object-fit: cover;
+  }
+
+  h1 {
+    margin-top: 5rem;
+    font-size: 3rem;
+    line-height: 3.65rem;
+    font-weight: 700;
+    color: var(--heading);
+  }
+
+  .info {
+    display: flex;
+    flex-direction: row;
+
+    margin-top: 1.5rem;
+
+    :nth-child(2) {
+      margin-right: 1.5rem;
+    }
+    color: var(--info);
+
+    .icon {
+      width: 20;
+      height: 20;
+    }
+
+    p {
+      margin-left: 0.5rem;
+      font-size: 0.875rem;
+      line-height: 1rem;
+      font-weight: 400;
+    }
+  }
+}
+
+.content {
+  color: var(--heading);
+
+  h2 {
+    margin-top: 4rem;
+    font-size: 2rem;
+    line-height: 2.25rem;
+    font-weight: 700;
+  }
+
+  p {
+    margin-top: 1.5rem;
+    font-size: 1.125rem;
+    line-height: 1.5rem;
+    font-weight: 400;
+  }
+}

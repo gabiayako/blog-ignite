@@ -1,4 +1,5 @@
 import { GetStaticProps } from 'next';
+import Link from 'next/link';
 import Prismic from '@prismicio/client';
 import { format } from 'date-fns';
 import ptBR from 'date-fns/locale/pt-BR';
@@ -39,16 +40,18 @@ export default function Home({ postsPagination }: HomeProps) {
           uid,
           first_publication_date,
         }) => (
-          <div key={uid}>
-            <h1>{title}</h1>
-            <h3>{subtitle}</h3>
-            <div className={styles.info}>
-              <FiCalendar className={styles.icon} />
-              <p>{first_publication_date}</p>
-              <FiUser className={styles.icon} />
-              <p>{author}</p>
-            </div>
-          </div>
+          <Link key={uid} href={`post/${uid}`}>
+            <a>
+              <h1>{title}</h1>
+              <h3>{subtitle}</h3>
+              <div className={styles.info}>
+                <FiCalendar className={styles.icon} />
+                <p>{first_publication_date}</p>
+                <FiUser className={styles.icon} />
+                <p>{author}</p>
+              </div>
+            </a>
+          </Link>
         )
       )}
     </div>
