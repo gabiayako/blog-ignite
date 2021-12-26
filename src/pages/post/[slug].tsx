@@ -79,7 +79,6 @@ export const getStaticProps: GetStaticProps = async context => {
 
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', String(slug), {});
-  console.log('\n\n\n\nresponse', response.data.content);
   const post = {
     first_publication_date: format(
       new Date(response.first_publication_date),
