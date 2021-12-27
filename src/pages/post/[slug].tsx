@@ -33,6 +33,11 @@ interface PostProps {
   post: Post;
 }
 
+const getReadingTime = (body: string): number => {
+  const words = body.split(' ').length;
+  return Math.ceil(words / 200);
+};
+
 export default function Post({ post }: PostProps) {
   const {
     first_publication_date,
@@ -45,6 +50,10 @@ export default function Post({ post }: PostProps) {
     return <div>Carregando...</div>;
   }
 
+  const readingTime = getReadingTime(
+    content.map(({ body }) => RichText.asText(body)).join(' ')
+  );
+
   return (
     <div className={styles.container}>
       <Header />
@@ -55,6 +64,8 @@ export default function Post({ post }: PostProps) {
         <p>{formatDate(first_publication_date)}</p>
         <FiUser className={styles.icon} />
         <p>{author}</p>
+        <FiClock className={styles.icon} />
+        <p>{`${readingTime} min`}</p>
       </div>
       <div className={styles.content}>
         {content.map(({ heading, body }) => (
