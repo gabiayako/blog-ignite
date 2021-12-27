@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import Prismic from '@prismicio/client';
@@ -6,7 +7,6 @@ import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import { getPrismicClient } from '../services/prismic';
 
-import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 import Header from '../components/Header';
 import { formatDate } from '../utils';
@@ -31,10 +31,23 @@ interface HomeProps {
 }
 
 export default function Home({ postsPagination }: HomeProps) {
+  const [posts, setPosts] = useState(postsPagination.results);
+
+  const handleButtonClick = () => {
+    fetch(postsPagination.next_page)
+      .then(res => res.json())
+      .then(nextPagePosts => {
+        setPosts(oldPosts => [...oldPosts, ...nextPagePosts.results]);
+      })
+      .catch(err => {
+        console.log(err);
+      });
+  };
+
   return (
     <div className={styles.main}>
       <Header />
-      {postsPagination.results.map(
+      {posts.map(
         ({
           data: { title, subtitle, author },
           uid,
@@ -55,7 +68,9 @@ export default function Home({ postsPagination }: HomeProps) {
         )
       )}
       {!!postsPagination.next_page && (
-        <button type="button">Carregar mais posts</button>
+        <button type="button" onClick={handleButtonClick}>
+          Carregar mais posts
+        </button>
       )}
     </div>
   );

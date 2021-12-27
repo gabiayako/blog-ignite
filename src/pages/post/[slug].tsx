@@ -3,11 +3,9 @@ import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
 import Prismic from '@prismicio/client';
-import Image from 'next/image';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
 import { getPrismicClient } from '../../services/prismic';
 
-import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import Header from '../../components/Header';
 import { formatDate } from '../../utils';
