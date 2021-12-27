@@ -60,7 +60,7 @@ export default function Post({ post }: PostProps) {
         {content.map(({ heading, body }) => (
           <>
             <h2>{heading}</h2>
-            <p>{body}</p>
+            <p>{RichText.asText(body)}</p>
           </>
         ))}
       </div>
@@ -68,7 +68,7 @@ export default function Post({ post }: PostProps) {
   );
 }
 
-export const getStaticPaths = async () => {
+export const getStaticPaths: GetStaticPaths = async () => {
   const prismic = getPrismicClient();
   const posts = await prismic.query(
     [Prismic.predicates.at('document.type', 'posts')],
