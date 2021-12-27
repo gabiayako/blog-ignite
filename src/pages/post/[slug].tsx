@@ -1,7 +1,5 @@
 import React from 'react';
 import { GetStaticPaths, GetStaticProps } from 'next';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
 import { RichText } from 'prismic-dom';
 import Image from 'next/image';
 import { FiCalendar, FiClock, FiUser } from 'react-icons/fi';
@@ -10,6 +8,7 @@ import { getPrismicClient } from '../../services/prismic';
 import commonStyles from '../../styles/common.module.scss';
 import styles from './post.module.scss';
 import Header from '../../components/Header';
+import { formatDate } from '../../utils';
 
 interface Post {
   first_publication_date: string | null;
@@ -44,7 +43,7 @@ export default function Post({ post }: PostProps) {
       <h1>{title}</h1>
       <div className={styles.info}>
         <FiCalendar className={styles.icon} />
-        <p>{first_publication_date}</p>
+        <p>{formatDate(first_publication_date)}</p>
         <FiUser className={styles.icon} />
         <p>{author}</p>
       </div>
@@ -80,13 +79,7 @@ export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', String(slug), {});
   const post = {
-    first_publication_date: format(
-      new Date(response.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: response.first_publication_date,
     data: {
       title: response.data.title,
       banner: {
@@ -95,7 +88,7 @@ export const getStaticProps: GetStaticProps = async context => {
       author: response.data.author,
       content: response.data.content.map(c => ({
         heading: c.heading,
-        body: RichText.asText(c.body),
+        body: RichText.asHtml(c.body),
       })),
     },
   };

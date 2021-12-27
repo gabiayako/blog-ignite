@@ -41,4 +41,19 @@
       font-weight: 400;
     }
   }
+
+  button {
+    margin-top: 5rem;
+
+    background-color: transparent;
+    border: none;
+    font-size: 1.125rem;
+    font-weight: 700;
+    color: var(--highlight);
+
+    transition: filter 0.2s;
+    &:hover {
+      filter: brightness(0.9);
+    }
+  }
 }

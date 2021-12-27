@@ -1,8 +1,7 @@
 import { GetStaticProps } from 'next';
 import Link from 'next/link';
 import Prismic from '@prismicio/client';
-import { format } from 'date-fns';
-import ptBR from 'date-fns/locale/pt-BR';
+
 import { FiCalendar, FiUser } from 'react-icons/fi';
 
 import { getPrismicClient } from '../services/prismic';
@@ -10,6 +9,7 @@ import { getPrismicClient } from '../services/prismic';
 import commonStyles from '../styles/common.module.scss';
 import styles from './home.module.scss';
 import Header from '../components/Header';
+import { formatDate } from '../utils';
 
 interface Post {
   uid?: string;
@@ -46,13 +46,16 @@ export default function Home({ postsPagination }: HomeProps) {
               <h3>{subtitle}</h3>
               <div className={styles.info}>
                 <FiCalendar className={styles.icon} />
-                <p>{first_publication_date}</p>
+                <p>{formatDate(first_publication_date)}</p>
                 <FiUser className={styles.icon} />
                 <p>{author}</p>
               </div>
             </a>
           </Link>
         )
+      )}
+      {!!postsPagination.next_page && (
+        <button type="button">Carregar mais posts</button>
       )}
     </div>
   );
@@ -70,13 +73,7 @@ export const getStaticProps: GetStaticProps = async () => {
 
   const posts = postsResponse.results.map(post => ({
     uid: post?.uid,
-    first_publication_date: format(
-      new Date(post.first_publication_date),
-      'dd MMM yyyy',
-      {
-        locale: ptBR,
-      }
-    ),
+    first_publication_date: post.first_publication_date,
     data: {
       title: post.data.title,
       subtitle: post.data.subtitle,
