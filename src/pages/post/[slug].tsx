@@ -90,8 +90,10 @@ export const getStaticProps: GetStaticProps = async context => {
   const prismic = getPrismicClient();
   const response = await prismic.getByUID('posts', String(slug), {});
   const post = {
+    uid: response.uid,
     first_publication_date: response.first_publication_date,
     data: {
+      subtitle: response.data.subtitle,
       title: response.data.title,
       banner: {
         url: response.data.banner.url,
@@ -99,7 +101,7 @@ export const getStaticProps: GetStaticProps = async context => {
       author: response.data.author,
       content: response.data.content.map(c => ({
         heading: c.heading,
-        body: RichText.asText(c.body),
+        body: c.body,
       })),
     },
   };
