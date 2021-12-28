@@ -8,6 +8,7 @@ import { getPrismicClient } from '../../services/prismic';
 
 import styles from './post.module.scss';
 import Header from '../../components/Header';
+import Comments from '../../components/Comments';
 import { formatDate } from '../../utils';
 
 interface Post {
@@ -73,6 +74,7 @@ export default function Post({ post }: PostProps) {
           </>
         ))}
       </div>
+      <Comments />
     </div>
   );
 }
