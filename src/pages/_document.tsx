@@ -14,7 +14,7 @@ export default class MyDocument extends Document {
           <script
             async
             defer
-            src="https://static.cdn.prismic.io/prismic.js?new=true&repo=blog-ignite-gabiayako"
+            src="//static.cdn.prismic.io/prismic.js?repo=blog-ignite-gabiayako&new=true"
           />
         </Head>
         <body>
