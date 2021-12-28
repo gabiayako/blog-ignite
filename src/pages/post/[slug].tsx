@@ -1,4 +1,5 @@
 import React from 'react';
+import Link from 'next/link';
 import { useRouter } from 'next/router';
 import { GetStaticPaths, GetStaticProps } from 'next';
 import { RichText } from 'prismic-dom';
@@ -28,8 +29,15 @@ interface Post {
   };
 }
 
+interface NeighborPost {
+  slug: string;
+  title: string;
+}
+
 interface PostProps {
   post: Post;
+  nextPost: NeighborPost | null;
+  previousPost: NeighborPost | null;
 }
 
 const getReadingTime = (body: string): number => {
@@ -37,7 +45,7 @@ const getReadingTime = (body: string): number => {
   return Math.ceil(words / 200);
 };
 
-export default function Post({ post }: PostProps) {
+export default function Post({ post, previousPost, nextPost }: PostProps) {
   const {
     first_publication_date,
     data: { title, banner, author, content },
@@ -74,6 +82,27 @@ export default function Post({ post }: PostProps) {
           </>
         ))}
       </div>
+      <div className={styles.divider} />
+      <div className={styles.neighborPosts}>
+        {previousPost ? (
+          <Link href={previousPost.slug}>
+            <div className={styles.previousPost}>
+              <a>{previousPost.title}</a>
+              <p>Post anterior</p>
+            </div>
+          </Link>
+        ) : (
+          <div />
+        )}
+        {nextPost && (
+          <Link href={nextPost.slug}>
+            <div className={styles.nextPost}>
+              <a>{nextPost.title}</a>
+              <p>Próximo post</p>
+            </div>
+          </Link>
+        )}
+      </div>
       <Comments />
     </div>
   );
@@ -99,6 +128,15 @@ export const getStaticProps: GetStaticProps = async context => {
   const { slug } = context.params;
 
   const prismic = getPrismicClient();
+
+  const allPostsResponse = await prismic.query([
+    Prismic.predicates.at('document.type', 'posts'),
+  ]);
+  const allPosts = allPostsResponse.results.map(post => ({
+    slug: post?.uid,
+    title: post?.data.title,
+  }));
+
   const response = await prismic.getByUID('posts', String(slug), {});
   const post = {
     uid: response.uid,
@@ -116,7 +154,18 @@ export const getStaticProps: GetStaticProps = async context => {
       })),
     },
   };
+
+  const postIndex = allPosts.findIndex(p => p.slug === post.uid);
+
+  const nextPost =
+    postIndex + 1 < allPosts.length ? allPosts[postIndex + 1] : null;
+  const previousPost = postIndex - 1 >= 0 ? allPosts[postIndex - 1] : null;
+
   return {
-    props: { post },
+    props: {
+      post,
+      previousPost,
+      nextPost,
+    },
   };
 };
