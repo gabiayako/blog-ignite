@@ -5,3 +5,8 @@ export const formatDate = (date: string): string =>
   format(new Date(date), 'dd MMM yyyy', {
     locale: ptBR,
   });
+
+export const formatDateAndHour = (date: string): string =>
+  format(new Date(date), "dd MMM yyyy', às 'HH:mm", {
+    locale: ptBR,
+  });

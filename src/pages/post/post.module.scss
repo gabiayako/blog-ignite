@@ -52,6 +52,17 @@
   }
 }
 
+.edited {
+  margin-top: 1rem;
+
+  p {
+    font-size: 0.875rem;
+    font-style: italic;
+    font-weight: 400;
+    color: var(--info);
+  }
+}
+
 .content {
   color: var(--heading);
 

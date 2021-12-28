@@ -10,10 +10,11 @@ import { getPrismicClient } from '../../services/prismic';
 import styles from './post.module.scss';
 import Header from '../../components/Header';
 import Comments from '../../components/Comments';
-import { formatDate } from '../../utils';
+import { formatDate, formatDateAndHour } from '../../utils';
 
 interface Post {
   first_publication_date: string | null;
+  last_publication_date: string | null;
   data: {
     title: string;
     banner: {
@@ -61,6 +62,9 @@ export default function Post({ post, previousPost, nextPost }: PostProps) {
     content.map(({ body }) => RichText.asText(body)).join(' ')
   );
 
+  const showEditText =
+    post.first_publication_date !== post.last_publication_date;
+
   return (
     <div className={styles.container}>
       <Header />
@@ -74,6 +78,13 @@ export default function Post({ post, previousPost, nextPost }: PostProps) {
         <FiClock className={styles.icon} />
         <p>{`${readingTime} min`}</p>
       </div>
+      {showEditText && (
+        <div className={styles.edited}>
+          <p>{`* editado em ${formatDateAndHour(
+            post.last_publication_date
+          )}`}</p>
+        </div>
+      )}
       <div className={styles.content}>
         {content.map(({ heading, body }) => (
           <>
@@ -141,6 +152,7 @@ export const getStaticProps: GetStaticProps = async context => {
   const post = {
     uid: response.uid,
     first_publication_date: response.first_publication_date,
+    last_publication_date: response.last_publication_date,
     data: {
       subtitle: response.data.subtitle,
       title: response.data.title,
